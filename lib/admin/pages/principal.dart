@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:saladilloapp/admin/pages/nuevoCarrito.dart';
+import 'package:saladilloapp/admin/pages/nuevodispositivo.dart';
 
 import '../../utils/utilPrestamos.dart';
 import '../../utils/utilText.dart';
@@ -53,6 +55,24 @@ class _principalState extends State<principal> {
               child: getListView(ViewType.incidencias),
             ),
             Padding(padding: EdgeInsets.fromLTRB(0, 50, 0, 0)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>const nuevoCarrito()));
+                    },
+                    child: Text('Nuevo carrito')
+                ),
+                Padding(padding: EdgeInsets.fromLTRB(0, 0, 10, 0)),
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>const NuevoDispositivo()));
+                    },
+                    child: Text('Nuevo Dispositivo')
+                ),
+              ],
+            )
 
           ],
         ),

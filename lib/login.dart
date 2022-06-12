@@ -125,8 +125,7 @@ class _LoginState extends State<Login> {
   Future<bool> validateUser(BuildContext? currentContext) async {
     bool flag = true;
     try {
-      await auth.signInWithEmailAndPassword(
-          email: userName, password: passWord);
+      await auth.signInWithEmailAndPassword(email: userName, password: passWord);
     } on FirebaseAuthException catch (e) {
       flag = false;
       ScaffoldMessenger.of(currentContext!).showSnackBar(SnackBar(
@@ -161,8 +160,7 @@ class _LoginState extends State<Login> {
     } else if (auth.currentUser!.email!.endsWith("profesor.es")) {
       Navigator.push(
           buildContext,
-          MaterialPageRoute(
-              builder: (context) => const pantallaPrincipalProfesor()));
+          MaterialPageRoute(builder: (context) => const pantallaPrincipalProfesor()));
     }
     // Navigator.push(buildContext, MaterialPageRoute(builder: (context)=>const Chat()));
   }

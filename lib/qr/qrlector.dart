@@ -35,7 +35,7 @@ class _QRViewExampleState extends State<QRViewExample> {
         children: <Widget>[
           Expanded(flex: 4, child: _buildQrView(context)),
           Expanded(
-            flex: 1,
+            flex: 3,
             child: FittedBox(
               fit: BoxFit.contain,
               child: Column(
@@ -51,6 +51,8 @@ class _QRViewExampleState extends State<QRViewExample> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Container(
+                        width: 250,
+                        height: 50,
                         margin: const EdgeInsets.all(8),
                         child: ElevatedButton(
                             onPressed: () async {
@@ -60,11 +62,13 @@ class _QRViewExampleState extends State<QRViewExample> {
                             child: FutureBuilder(
                               future: controller?.getFlashStatus(),
                               builder: (context, snapshot) {
-                                return Text('Flash: ${snapshot.data}');
+                                return Text('Activar Flash');
                               },
                             )),
                       ),
                       Container(
+                        width: 250,
+                        height: 50,
                         margin: const EdgeInsets.all(8),
                         child: ElevatedButton(
                             onPressed: () async {
@@ -75,8 +79,12 @@ class _QRViewExampleState extends State<QRViewExample> {
                               future: controller?.getCameraInfo(),
                               builder: (context, snapshot) {
                                 if (snapshot.data != null) {
-                                  return Text(
-                                      'Camera facing ${describeEnum(snapshot.data!)}');
+                                  if(describeEnum(snapshot.data!)=='back'){
+                                    return Text('Activar camara delantera');
+                                  }else{
+                                    return Text('Activar camara trasera');
+                                  }
+
                                 } else {
                                   return const Text('loading');
                                 }
@@ -90,22 +98,26 @@ class _QRViewExampleState extends State<QRViewExample> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Container(
+                        width: 250,
+                        height: 50,
                         margin: const EdgeInsets.all(8),
                         child: ElevatedButton(
                           onPressed: () async {
                             await controller?.pauseCamera();
                           },
-                          child: const Text('pause',
+                          child: const Text('Pausar',
                               style: TextStyle(fontSize: 20)),
                         ),
                       ),
                       Container(
+                        width: 250,
+                        height: 50,
                         margin: const EdgeInsets.all(8),
                         child: ElevatedButton(
                           onPressed: () async {
                             await controller?.resumeCamera();
                           },
-                          child: const Text('resume',
+                          child: const Text('Activar',
                               style: TextStyle(fontSize: 20)),
                         ),
                       )
@@ -132,10 +144,10 @@ class _QRViewExampleState extends State<QRViewExample> {
       key: qrKey,
       onQRViewCreated: _onQRViewCreated,
       overlay: QrScannerOverlayShape(
-          borderColor: Colors.red,
+          borderColor: Colors.green,
           borderRadius: 10,
-          borderLength: 30,
-          borderWidth: 10,
+          borderLength: 70,
+          borderWidth: 15,
           cutOutSize: scanArea),
       onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
     );

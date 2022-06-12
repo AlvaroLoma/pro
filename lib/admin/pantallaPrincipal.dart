@@ -1,6 +1,8 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:saladilloapp/admin/pages/listCarritos.dart';
+import 'package:saladilloapp/admin/pages/nuevoCarrito.dart';
 import 'package:saladilloapp/admin/pages/principal.dart';
 
 import 'package:saladilloapp/admin/prestamo.dart';
@@ -26,9 +28,9 @@ class _pantallPrincipalState extends State<pantallPrincipal> {
     principal(),
     Prestamo(),
     Reserva(),
-    NuevoAlumno(),
-    NuevoDispositivo(),
-    NuevoDispositivo()//carrito impostor
+    Reserva(),
+    listCarritos(),
+   //carrito impostor
 
   ];
 
@@ -44,7 +46,6 @@ class _pantallPrincipalState extends State<pantallPrincipal> {
     return Scaffold(
       body: _paginas[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
-
         selectedFontSize: 15,
         iconSize: 30,
         items: const <BottomNavigationBarItem>[
@@ -63,11 +64,7 @@ class _pantallPrincipalState extends State<pantallPrincipal> {
             label: 'Reserva',
             backgroundColor: Colors.blue,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            label: 'Nuevo Alumno',
-            backgroundColor: Colors.blue,
-          ),
+
           BottomNavigationBarItem(
             icon: Icon(Icons.add_to_queue),
             label: 'Dispositivo',
@@ -75,7 +72,7 @@ class _pantallPrincipalState extends State<pantallPrincipal> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.add_shopping_cart),
-            label: 'Crear Carrito',
+            label: 'Carritos',
             backgroundColor: Colors.blue,
           ),
         ],
