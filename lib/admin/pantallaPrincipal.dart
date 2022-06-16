@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:saladilloapp/admin/pages/devolucion.dart';
 import 'package:saladilloapp/admin/pages/listCarritos.dart';
 import 'package:saladilloapp/admin/pages/nuevoCarrito.dart';
 import 'package:saladilloapp/admin/pages/principal.dart';
@@ -27,7 +28,7 @@ class _pantallPrincipalState extends State<pantallPrincipal> {
   static const List<Widget> _paginas = <Widget>[
     principal(),
     Prestamo(),
-    Reserva(),
+    Devolucion(),
     Reserva(),
     listCarritos(),
    //carrito impostor
@@ -60,14 +61,14 @@ class _pantallPrincipalState extends State<pantallPrincipal> {
             backgroundColor: Colors.blue,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.account_balance_wallet_sharp),
+            icon: Icon(Icons.arrow_upward),
             label: 'Devolucion',
             backgroundColor: Colors.blue,
           ),
 
           BottomNavigationBarItem(
-            icon: Icon(Icons.add_to_queue),
-            label: 'Dispositivo',
+            icon: Icon(Icons.account_balance_wallet),
+            label: 'Reserva',
             backgroundColor: Colors.blue,
           ),
           BottomNavigationBarItem(

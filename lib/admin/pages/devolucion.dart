@@ -1,36 +1,33 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-class Prestamo extends StatefulWidget {
-  const Prestamo({Key? key}) : super(key: key);
+class Devolucion extends StatefulWidget {
+  const Devolucion({Key? key}) : super(key: key);
 
   @override
-  State<Prestamo> createState() => _PrestamoState();
+  State<Devolucion> createState() => _DevolucionState();
 }
 
-class _PrestamoState extends State<Prestamo> {
-  List<String> alumnos = [
-    'Alvaro Lodeiro',
-    'Palma Rodriguez',
-    'Alberto Lopez',
-    'Jose luis Perez',
-    'Roberto Gonzalez'
-  ];
-  String alumnosValue = 'Alvaro Lodeiro';
+class _DevolucionState extends State<Devolucion> {
+  String _observaciones ="";
 
-  List<String> cursos = ['1a', '1b', '2a', '2b', '3a', '3b', '4a', '4b'];
-  String cursoValue = '1a';
+  final TextEditingController _textController1 = TextEditingController();
+  List<String> estados = ['Sin incidencia', 'con incidencia'];
+  String sdropdownValue = 'Sin incidencia';
+  List<String> listIncidencias=[];
+  String listValue ='abierta';
   Barcode? result;
   QRViewController? controller;
+  final _formulario = GlobalKey<FormState>();
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Prestamo"),
+        title: Text("Devoluciones"),
         leading: IconButton(
           icon: Icon(Icons.keyboard_backspace),
           onPressed: () {
@@ -98,25 +95,23 @@ class _PrestamoState extends State<Prestamo> {
                         margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
                         child: Row(
                           children: [
-                            Text('Curso'),
-                            Padding(
-                                padding: EdgeInsets.fromLTRB(0, 0, 20, 0)),
+                            Text('Estado'),
+                            const Padding(padding: EdgeInsets.fromLTRB(0, 0, 20, 0)),
                             DropdownButton<String>(
-                              value: cursoValue,
+                              value: sdropdownValue,
                               icon: const Icon(Icons.arrow_downward),
                               elevation: 16,
-                              style:
-                              const TextStyle(color: Colors.deepPurple),
+                              style: const TextStyle(color: Colors.deepPurple),
                               underline: Container(
                                 height: 2,
                                 color: Colors.deepPurpleAccent,
                               ),
                               onChanged: (String? newValue) {
                                 setState(() {
-                                  cursoValue = newValue!;
+                                  sdropdownValue = newValue!;
                                 });
                               },
-                              items: cursos.map<DropdownMenuItem<String>>(
+                              items: estados.map<DropdownMenuItem<String>>(
                                       (String value) {
                                     return DropdownMenuItem<String>(
                                       value: value,
@@ -126,49 +121,85 @@ class _PrestamoState extends State<Prestamo> {
                             )
                           ],
                         )),
-                    Container(
-                        margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                        child: Row(
-                          children: [
-                            Text('Alumno'),
-                            Padding(
-                                padding: EdgeInsets.fromLTRB(0, 0, 20, 0)),
-                            DropdownButton<String>(
-                              value: alumnosValue,
-                              icon: const Icon(Icons.arrow_downward),
-                              elevation: 16,
-                              style:
-                              const TextStyle(color: Colors.deepPurple),
-                              underline: Container(
-                                height: 2,
-                                color: Colors.deepPurpleAccent,
-                              ),
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  alumnosValue = newValue!;
-                                });
-                              },
-                              items: alumnos.map<DropdownMenuItem<String>>(
-                                      (String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(value),
-                                    );
-                                  }).toList(),
-                            )
-                          ],
-                        )),
+                    if(sdropdownValue=='con incidencia')
+                      Form(
 
+                        key: _formulario,
+                        child: Column(
+                          children: [
+                            Container(
+                                margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                child: Row(
+                                  children: [
+                                    Text('Estado'),
+                                    const Padding(padding: EdgeInsets.fromLTRB(0, 0, 20, 0)),
+                                    FutureBuilder(
+                                        future: estadosIncidencias() ,
+                                        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                                          if (snapshot.connectionState == ConnectionState.waiting) {
+                                            return const Center(
+                                              child: CircularProgressIndicator(),
+                                            );
+                                          } else {
+                                            return DropdownButton<String>(
+                                              value: listValue,
+                                              icon: const Icon(Icons.arrow_downward),
+                                              elevation: 16,
+                                              style: const TextStyle(color: Colors.deepPurple),
+                                              underline: Container(
+                                                height: 2,
+                                                color: Colors.deepPurpleAccent,
+                                              ),
+                                              onChanged: (String? newValue) {
+                                                setState(() {
+                                                  listValue = newValue!;
+                                                });
+                                              },
+                                              items: listIncidencias.map<DropdownMenuItem<String>>(
+                                                      (String value) {
+                                                    return DropdownMenuItem<String>(
+                                                      value: value,
+                                                      child: Text(value),
+                                                    );
+                                                  }).toList(),
+                                            ); }
+                                        }
+                                    )
+                                  ],
+                                )),
+                            Container(
+                              margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                              child: TextFormField(
+                                controller: _textController1,
+                                maxLines: 6,
+                                decoration: const InputDecoration(
+                                  labelText: "Observaciones",
+                                ),
+                                keyboardType: TextInputType.name,
+                                validator: (valorCampo) {
+                                  _observaciones = valorCampo.toString();
+                                  return null;
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     Container(
                       margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                       child: ElevatedButton(
                         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.blue)),
                         onPressed: () {
-                          realizarPrestamo();
+                          _formulario.currentState!.save();
+                          if (_formulario.currentState!.validate()) {
+                            realizarDevolcion();
+
+                          }
+
                         },
                         child: Container(
                           child: const Text(
-                            "Realizar prestamo",
+                            "Realizar Devolucion",
                             style: TextStyle(color: Colors.black),
                           ),
                         ),
@@ -225,23 +256,46 @@ class _PrestamoState extends State<Prestamo> {
     }
   }
 
-  Future<void> realizarPrestamo() async {
+
+  Future<void> estadosIncidencias() async {
+    QuerySnapshot query = await FirebaseFirestore.instance.collection('EstadosIncidencias').get();
+    if(listIncidencias.isEmpty){
+      for (var e = 0; e < query.docs.length; e++) {
+        Map? mapa = query.docs.elementAt(e).data() as Map?;
+        listIncidencias.add(mapa!["estado"]);
+      }
+    }
+
+  }
+  @override
+  void dispose() {
+    controller?.dispose();
+    super.dispose();
+  }
+
+  Future<void> realizarDevolcion() async {
 
     if(result?.code != null){
       QuerySnapshot query= await FirebaseFirestore.instance.collection('Alumno').where("email", isEqualTo: FirebaseAuth.instance.currentUser!.email).get();
       Map? mapa = query.docs.elementAt(0).data() as Map?;
-      QuerySnapshot query2= await FirebaseFirestore.instance.collection('Prestamos').get();
-
-      FirebaseFirestore.instance.collection('Prestamos').add({
-        "idAlumno":mapa!['id'],
+      QuerySnapshot query3= await FirebaseFirestore.instance.collection('Devoluciones').get();
+      FirebaseFirestore.instance.collection('Devoluciones').add({
         "idDispositivo":result?.code,
-        "idPrestamo": query2.docs.length+1
+        "idAlumno": mapa!['id'],
+        "idDevolucion":query3.docs.length+1
 
       });
+      if(sdropdownValue=='con incidencia'){
+        QuerySnapshot query2= await FirebaseFirestore.instance.collection('Incidencias').get();
 
-
+        FirebaseFirestore.instance.collection('Incidencias').add({
+          "idDispositivo":result?.code,
+          "observaciones": _observaciones,
+          "idIncidencia":query2.docs.length+1,
+          "idEstado":listValue
+        });
+      }
     }
-
 
   }
 }

@@ -47,6 +47,40 @@ class _principalState extends State<principal> {
               height: 150,
               child: Container(),
             ),
+            Container(
+              decoration: BoxDecoration(border: Border.all(color: Colors.black,style: BorderStyle.solid,width: 2)),
+              margin: const EdgeInsets.fromLTRB(5, 20, 5, 0),
+              width: 400,
+              height: 200,
+
+              child: Stack(
+                children: <Widget>[
+                  Positioned(
+                      top: 20,
+                      left: 10,
+                      child: Image.asset(
+                        "assets/image/userImage.png",
+                      )
+                  ),
+                  Positioned(
+                      top: 20,
+                      left: 160,
+                      child: Text('Nombre',style: TextStyle(fontSize: 25),)
+                  ),
+                  Positioned(
+                      top: 50,
+                      left: 160,
+                      child: Text( 'Apellidos',style: TextStyle(fontSize: 25),)
+                  ),
+
+                  Positioned(
+                      top: 80,
+                      left: 160,
+                      child: Text( 'Email',style: TextStyle(fontSize: 25),)
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),

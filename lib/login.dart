@@ -40,6 +40,7 @@ class _LoginState extends State<Login> {
         actions: [
           TextButton(
             onPressed: (){
+              FirebaseAuth.instance.signOut();
               Navigator.push(_formulario.currentContext!, MaterialPageRoute(builder: (context)=>const Registrarse()));
             },
             child: Text('Registrarse'),)
