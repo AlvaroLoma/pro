@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:saladilloapp/admin/pages/nuevoCarrito.dart';
-import 'package:saladilloapp/admin/pages/nuevodispositivo.dart';
 
 import '../../utils/utilPrestamos.dart';
 import '../../utils/utilText.dart';
+
 enum ViewType { incidencias, prestamos, reservas }
 class principal extends StatefulWidget {
   const principal({Key? key}) : super(key: key);
@@ -40,57 +39,14 @@ class _principalState extends State<principal> {
             Container(
               margin: margin,
               height: 100,
-              child: getListView(ViewType.reservas),
+              child: Container(),
             ),
             utilText('Prestamos', 25, numPrestamos),
             Container(
               margin: margin,
               height: 150,
-              child: getListView(ViewType.prestamos),
+              child: Container(),
             ),
-            utilText('Incidencias', 25, numIndicencias),
-            Container(
-              margin: margin,
-              height: 100,
-              child: getListView(ViewType.incidencias),
-            ),
-            Padding(padding: EdgeInsets.fromLTRB(0, 50, 0, 0)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>const nuevoCarrito()));
-                    },
-                    child: Text('Nuevo carrito')
-                ),
-                Padding(padding: EdgeInsets.fromLTRB(0, 0, 10, 0)),
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>const NuevoDispositivo()));
-                    },
-                    child: Text('Nuevo Dispositivo')
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>const nuevoCarrito()));
-                    },
-                    child: Text('Nueva Aula')
-                ),
-                Padding(padding: EdgeInsets.fromLTRB(0, 0, 10, 0)),
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>const NuevoDispositivo()));
-                    },
-                    child: Text('Nuevo Curso')
-                ),
-              ],
-            )
           ],
         ),
       ),
@@ -190,7 +146,7 @@ class _principalState extends State<principal> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                          'holi',
+                            'holi',
                             style: TextStyle(
 
                               fontWeight: FontWeight.w500,
@@ -209,7 +165,7 @@ class _principalState extends State<principal> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                       'adios',
+                        'adios',
                         textAlign: TextAlign.center,
                         style: TextStyle(
 

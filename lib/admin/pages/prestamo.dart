@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-import '../qr/qrlector.dart';
+import '../../qr/qrlector.dart';
 
 class Prestamo extends StatefulWidget {
   const Prestamo({Key? key}) : super(key: key);
@@ -11,6 +12,9 @@ class Prestamo extends StatefulWidget {
 }
 
 class _PrestamoState extends State<Prestamo> {
+  Barcode? result;
+  QRViewController? controller;
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   final _formulario = GlobalKey<FormState>();
   List<String> alumnos = [
     'Alvaro Lodeiro',
@@ -41,9 +45,10 @@ class _PrestamoState extends State<Prestamo> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Image.asset(
-                  "assets/image/prestamo.png",
-                  width: 250,
+                Container(
+                  child: _buildQrView(context),
+                  width: 600,
+                  height: 200,
                 ),
                 Form(
                     key: _formulario,
@@ -113,7 +118,7 @@ class _PrestamoState extends State<Prestamo> {
                                 )
                               ],
                             )),
-                        Text('FALTA AÑADIR EL BOTON PARA LEER EL QR'),
+
                         Container(
                           margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                           child: ElevatedButton(
@@ -143,5 +148,46 @@ class _PrestamoState extends State<Prestamo> {
         ),
       ),
     );
+  }
+  Widget _buildQrView(BuildContext context) {
+    // For this example we check how width or tall the device is and change the scanArea and overlay accordingly.
+    var scanArea = (MediaQuery.of(context).size.width < 400 ||
+        MediaQuery.of(context).size.height < 400)
+        ? 150.0
+        : 300.0;
+    // To ensure the Scanner view is properly sizes after rotation
+    // we need to listen for Flutter SizeChanged notification and update controller
+    return QRView(
+      key: qrKey,
+      onQRViewCreated: _onQRViewCreated,
+      overlay: QrScannerOverlayShape(
+          borderColor: Colors.blue,
+          borderRadius: 10,
+          borderLength: 70,
+          borderWidth: 15,
+          cutOutSize: scanArea),
+      onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
+    );
+  }
+
+
+  void _onQRViewCreated(QRViewController controller) {
+    setState(() {
+      this.controller = controller;
+    });
+    controller.scannedDataStream.listen((scanData) {
+      setState(() {
+        result = scanData;
+      });
+    });
+  }
+
+  void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
+
+    if (!p) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('no Permission')),
+      );
+    }
   }
 }

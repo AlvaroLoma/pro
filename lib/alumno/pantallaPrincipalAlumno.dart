@@ -1,29 +1,27 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:saladilloapp/profesor/pages/devolucion.dart';
-import 'package:saladilloapp/profesor/pages/prestamo.dart';
-import 'package:saladilloapp/profesor/pages/principal.dart';
-import 'package:saladilloapp/profesor/pages/reserva.dart';
+import 'pages/devolucion.dart';
+
+import 'pages/prestamo.dart';
+import 'pages/principal.dart';
 
 
 enum ViewType { incidencias, prestamos, reservas }
 
-class pantallaPrincipalProfesor extends StatefulWidget {
-  const pantallaPrincipalProfesor({Key? key}) : super(key: key);
+class PantallaPrincipalAlumno extends StatefulWidget {
+  const PantallaPrincipalAlumno({Key? key}) : super(key: key);
 
   @override
-  State<pantallaPrincipalProfesor> createState() =>
-      _pantallaPrincipalProfesorState();
+  State<PantallaPrincipalAlumno> createState() =>
+      _PantallaPrincipalAlumnoState();
 }
 
-class _pantallaPrincipalProfesorState extends State<pantallaPrincipalProfesor> {
+class _PantallaPrincipalAlumnoState extends State<PantallaPrincipalAlumno> {
   int _selectedIndex = 0;
   static const List<Widget> _paginas = <Widget>[
-    principal(),
-    Reserva(),
+    Principal(),
     Prestamo(),
-    Devolucion()
-
+    Devolucion(),
     //carrito impostor
 
   ];
@@ -49,21 +47,15 @@ class _pantallaPrincipalProfesorState extends State<pantallaPrincipalProfesor> {
             backgroundColor: Colors.blue,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.account_balance_wallet_sharp),
-            label: 'Reserva',
-            backgroundColor: Colors.blue,
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.add_circle),
             label: 'Prestamo',
             backgroundColor: Colors.blue,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.arrow_upward),
+            icon: Icon(Icons.arrow_upward_outlined),
             label: 'Devolucion',
             backgroundColor: Colors.blue,
           ),
-
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.amber[800],

@@ -37,13 +37,14 @@ class _utilPrestamosState extends State<utilPrestamos> {
   }
   getPrestamos() async {
     QuerySnapshot query = await FirebaseFirestore.instance.collection('Prestamos').get();
-    numPrestamos = query.docs.length;
+    numPrestamos =0;
+    //query.docs.length;
     for (var e = 0; e < numPrestamos; e++) {
-       Map? mapa = query.docs.elementAt(e).data() as Map?;
-      alumnPrestamos.add(mapa!["NomAlumno"]);
-      aulaPrestamo.add(mapa["Aula"]);
-      cursosPrestamos.add(mapa["Curso"]);
-      disPrestamos.add(mapa["Dispositivo"]);
+      // Map? mapa = query.docs.elementAt(e).data() as Map?;
+      //alumnPrestamos.add(mapa!["NomAlumno"]);
+      //aulaPrestamo.add(mapa["Aula"]);
+      //cursosPrestamos.add(mapa["Curso"]);
+      // disPrestamos.add(mapa["Dispositivo"]);
     }
   }
   tile(int index){

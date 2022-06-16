@@ -5,8 +5,8 @@ import 'package:saladilloapp/admin/pages/listCarritos.dart';
 import 'package:saladilloapp/admin/pages/nuevoCarrito.dart';
 import 'package:saladilloapp/admin/pages/principal.dart';
 
-import 'package:saladilloapp/admin/prestamo.dart';
-import 'package:saladilloapp/admin/reserva.dart';
+import 'package:saladilloapp/admin/pages/prestamo.dart';
+import 'package:saladilloapp/admin/pages/reserva.dart';
 import 'package:saladilloapp/utils/utilPrestamos.dart';
 
 
@@ -61,7 +61,7 @@ class _pantallPrincipalState extends State<pantallPrincipal> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_balance_wallet_sharp),
-            label: 'Reserva',
+            label: 'Devolucion',
             backgroundColor: Colors.blue,
           ),
 

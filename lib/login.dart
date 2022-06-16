@@ -2,7 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:saladilloapp/alumno/pantallaPrincipalAlumno.dart';
 import 'package:saladilloapp/profesor/pantallaPrincipal.dart';
+import 'package:saladilloapp/registarse.dart';
 
 import 'admin/pantallaPrincipal.dart';
 
@@ -35,6 +37,13 @@ class _LoginState extends State<Login> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Login"),
+        actions: [
+          TextButton(
+            onPressed: (){
+              Navigator.push(_formulario.currentContext!, MaterialPageRoute(builder: (context)=>const Registrarse()));
+            },
+            child: Text('Registrarse'),)
+        ],
       ),
       body: Center(
         child: Container(
@@ -53,9 +62,7 @@ class _LoginState extends State<Login> {
                         margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
                         child: TextFormField(
                           controller: _textController1,
-                          decoration: const InputDecoration(
-                            labelText: "Usuario",
-                          ),
+                          decoration: const InputDecoration(labelText: "Usuario",),
                           keyboardType: TextInputType.name,
                           validator: (valorCampo) {
                             if (validateEmail.hasMatch(valorCampo!)) {
@@ -63,7 +70,6 @@ class _LoginState extends State<Login> {
                             } else {
                               return "Correo no valido";
                             }
-
                             return null;
                           },
                         ),
@@ -73,8 +79,7 @@ class _LoginState extends State<Login> {
                         child: TextFormField(
                           controller: _textController2,
                           obscureText: true,
-                          decoration:
-                              const InputDecoration(labelText: "Contraseña"),
+                          decoration: const InputDecoration(labelText: "Contraseña"),
                           keyboardType: TextInputType.name,
                           validator: (valorCampo) {
                             if (valorCampo!.isNotEmpty) {
@@ -89,20 +94,16 @@ class _LoginState extends State<Login> {
                       Container(
                         margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                         child: ElevatedButton(
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.green)),
+                          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.green)),
                           onPressed: () {
                             _formulario.currentState!.save();
                             if (_formulario.currentState!.validate()) {
                               //Navigator.push(_formulario.currentContext!, MaterialPageRoute(builder: (context)=>const Games()));
-                              validateUser(_formulario.currentContext)
-                                  .then((value) => {
-                                        if (value)
-                                          {
-                                            navigate(_formulario.currentContext!)
-                                          }
-                                      });
+                              validateUser(_formulario.currentContext).then((value) => {
+                                if (value){
+                                  navigate(_formulario.currentContext!)
+                                }
+                              });
                             }
                           },
                           child: Container(
@@ -161,6 +162,10 @@ class _LoginState extends State<Login> {
       Navigator.push(
           buildContext,
           MaterialPageRoute(builder: (context) => const pantallaPrincipalProfesor()));
+    }else{
+      Navigator.push(
+          buildContext,
+          MaterialPageRoute(builder: (context) => const PantallaPrincipalAlumno()));
     }
     // Navigator.push(buildContext, MaterialPageRoute(builder: (context)=>const Chat()));
   }
