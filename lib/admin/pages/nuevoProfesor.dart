@@ -1,16 +1,21 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class NuevoAlumno extends StatefulWidget {
-  const NuevoAlumno({Key? key}) : super(key: key);
+class NuevoProfesor extends StatefulWidget {
+  const NuevoProfesor({Key? key}) : super(key: key);
 
   @override
-  State<NuevoAlumno> createState() => _NuevoAlumnoState();
+  State<NuevoProfesor> createState() => _NuevoProfesorState();
 }
 
-class _NuevoAlumnoState extends State<NuevoAlumno> {
+class _NuevoProfesorState extends State<NuevoProfesor> {
+
   final TextEditingController _textController1 = TextEditingController();
   final TextEditingController _textController2 = TextEditingController();
+  final TextEditingController _textController3 = TextEditingController();
+  final TextEditingController _textController4 = TextEditingController();
   RegExp validateEmail = RegExp(
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
   String userName = "";
@@ -24,12 +29,11 @@ class _NuevoAlumnoState extends State<NuevoAlumno> {
   String email = "";
 
   final _formulario = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Nuevo Alumno"),
+          title: Text("Registro"),
           leading: IconButton(
             icon: Icon(Icons.keyboard_backspace),
             onPressed: () {
@@ -44,7 +48,7 @@ class _NuevoAlumnoState extends State<NuevoAlumno> {
               child: Column(children: [
                 Image.asset(
                   "assets/image/adduser.png",
-                  width: 250,
+                  width: 200,
                 ),
                 Form(
                     key: _formulario,
@@ -55,84 +59,70 @@ class _NuevoAlumnoState extends State<NuevoAlumno> {
                           child: TextFormField(
                             controller: _textController1,
                             decoration: const InputDecoration(
-                              labelText: "Nombre del usuario",
+                              labelText: "Nombre ",
                             ),
                             keyboardType: TextInputType.name,
                             validator: (valorCampo) {
-                              nombre = valorCampo.toString();
-                              return null;
-                            },
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                          child: TextFormField(
-                            controller: _textController1,
-                            decoration: const InputDecoration(
-                              labelText: "Apellidos",
-                            ),
-                            keyboardType: TextInputType.name,
-                            validator: (valorCampo) {
-                              apellidos = valorCampo.toString();
+                              if(valorCampo.toString().isNotEmpty){
+                                nombre = valorCampo.toString();
+                                return null;
 
-                              return null;
+                              }
+
+                              return "el campo nombre no debe estar vacio";
                             },
                           ),
                         ),
+
                         Container(
                           margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
                           child: TextFormField(
-                            controller: _textController1,
+                            controller: _textController3,
                             decoration: const InputDecoration(
                               labelText: "Contraseña",
                             ),
                             keyboardType: TextInputType.name,
                             validator: (valorCampo) {
-                              contrasenia = valorCampo.toString();
-                              return null;
+                              if(valorCampo.toString().isNotEmpty){
+                                contrasenia = valorCampo.toString();
+                                return null;
+                              }
+
+                              return "el campo contraseña no puede estar vacio";
                             },
                           ),
                         ),
                         Container(
                           margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
                           child: TextFormField(
-                            controller: _textController1,
+                            controller: _textController4,
                             decoration: const InputDecoration(
                               labelText: "Email",
                             ),
                             keyboardType: TextInputType.name,
                             validator: (valorCampo) {
-                              email = valorCampo.toString();
-                              return null;
+                              if(valorCampo.toString().isNotEmpty){
+                                email = valorCampo.toString();
+                                return null;
+
+                              }
+                              return 'el campo email no puede estar vacio';
                             },
                           ),
                         ),
-                        Container(
-                          margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                          child: TextFormField(
-                            controller: _textController1,
-                            maxLines: 8,
-                            decoration: const InputDecoration(
-                              labelText: "Observaciones",
-                            ),
-                            keyboardType: TextInputType.name,
-                            validator: (valorCampo) {
-                              observaciones = valorCampo.toString();
-                              return null;
-                            },
-                          ),
-                        ),
+
+
                         Container(
                           margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                           child: ElevatedButton(
                             style: ButtonStyle(
                                 backgroundColor:
-                                    MaterialStateProperty.all(Colors.green)),
+                                MaterialStateProperty.all(Colors.green)),
                             onPressed: () {
                               _formulario.currentState!.save();
                               if (_formulario.currentState!.validate()) {
                                 //Navigator.push(_formulario.currentContext!, MaterialPageRoute(builder: (context)=>const Games()));
-
+                                registarse(_formulario.currentContext!);
                               }
                             },
                             child: Container(
@@ -149,5 +139,35 @@ class _NuevoAlumnoState extends State<NuevoAlumno> {
             ),
           ),
         ));
+  }
+
+  Future<void> registarse(BuildContext buildContext) async {
+
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: contrasenia);
+
+      ScaffoldMessenger.of(buildContext).showSnackBar(const SnackBar(
+        content: Text("Profesor creado con exito",textAlign: TextAlign.center,style: TextStyle( fontSize: 30),),
+      ));
+      try{
+        QuerySnapshot query= await FirebaseFirestore.instance.collection('Profesor').get();
+        FirebaseFirestore.instance.collection('Profesor').add({
+          "id":query.docs.length+1,
+          "Nombre":nombre,
+          "email": email,
+
+        });
+      }on FirebaseException catch(e){
+        print(e.message);
+      }
+      Navigator.pop(context);
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(buildContext).showSnackBar(SnackBar(
+        content: Text(e.code.toString(),textAlign: TextAlign.center,style: const TextStyle( fontSize: 30),),
+      ));
+    } catch (e) { }
+
+
+
   }
 }

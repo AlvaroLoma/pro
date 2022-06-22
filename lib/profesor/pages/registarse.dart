@@ -36,12 +36,7 @@ class _RegistrarseState extends State<Registrarse> {
     return Scaffold(
         appBar: AppBar(
           title: Text("Registro"),
-          leading: IconButton(
-            icon: Icon(Icons.keyboard_backspace),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
+          leading: IconButton(icon: Icon(Icons.keyboard_backspace), onPressed: () {  FirebaseAuth.instance.signOut(); Navigator.pop(context); },),
         ),
         body: Center(
           child: SingleChildScrollView(
@@ -134,7 +129,7 @@ class _RegistrarseState extends State<Registrarse> {
                             margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
                             child: Row(
                               children: [
-                                Text('Estado'),
+                                Text('Curso'),
                                 const Padding(padding: EdgeInsets.fromLTRB(0, 0, 20, 0)),
                                 FutureBuilder(
                                     future: cursosObtener() ,

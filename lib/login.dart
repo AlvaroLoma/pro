@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:saladilloapp/alumno/pantallaPrincipalAlumno.dart';
 import 'package:saladilloapp/profesor/pantallaPrincipal.dart';
-import 'package:saladilloapp/registarse.dart';
+import 'package:saladilloapp/profesor/pages/registarse.dart';
 
 import 'admin/pantallaPrincipal.dart';
 
@@ -37,14 +37,7 @@ class _LoginState extends State<Login> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Login"),
-        actions: [
-          TextButton(
-            onPressed: (){
-              FirebaseAuth.instance.signOut();
-              Navigator.push(_formulario.currentContext!, MaterialPageRoute(builder: (context)=>const Registrarse()));
-            },
-            child: Text('Registrarse'),)
-        ],
+
       ),
       body: Center(
         child: Container(

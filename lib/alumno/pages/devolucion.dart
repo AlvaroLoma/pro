@@ -28,12 +28,7 @@ class _DevolucionState extends State<Devolucion> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Devoluciones"),
-        leading: IconButton(
-          icon: Icon(Icons.keyboard_backspace),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        leading: IconButton(icon: Icon(Icons.keyboard_backspace), onPressed: () {  FirebaseAuth.instance.signOut(); Navigator.pop(context); },),
       ),
       body: Center(
         child: Container(

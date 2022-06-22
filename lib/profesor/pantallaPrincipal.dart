@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:saladilloapp/profesor/pages/devolucion.dart';
 import 'package:saladilloapp/profesor/pages/prestamo.dart';
 import 'package:saladilloapp/profesor/pages/principal.dart';
+import 'package:saladilloapp/profesor/pages/registarse.dart';
 import 'package:saladilloapp/profesor/pages/reserva.dart';
 
 
@@ -22,7 +23,8 @@ class _pantallaPrincipalProfesorState extends State<pantallaPrincipalProfesor> {
     principal(),
     Reserva(),
     Prestamo(),
-    Devolucion()
+    Devolucion(),
+    Registrarse()
 
     //carrito impostor
 
@@ -61,6 +63,11 @@ class _pantallaPrincipalProfesorState extends State<pantallaPrincipalProfesor> {
           BottomNavigationBarItem(
             icon: Icon(Icons.arrow_upward),
             label: 'Devolucion',
+            backgroundColor: Colors.blue,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle),
+            label: 'Nuevo Alumno',
             backgroundColor: Colors.blue,
           ),
 

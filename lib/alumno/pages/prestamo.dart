@@ -20,12 +20,7 @@ class _PrestamoState extends State<Prestamo> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Prestamo"),
-        leading: IconButton(
-          icon: Icon(Icons.keyboard_backspace),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        leading: IconButton(icon: Icon(Icons.keyboard_backspace), onPressed: () {  FirebaseAuth.instance.signOut(); Navigator.pop(context); },),
       ),
       body: Center(
         child: Container(

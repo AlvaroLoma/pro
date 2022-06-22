@@ -3,16 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:saladilloapp/admin/pages/devolucion.dart';
 import 'package:saladilloapp/admin/pages/listCarritos.dart';
-import 'package:saladilloapp/admin/pages/nuevoCarrito.dart';
+
 import 'package:saladilloapp/admin/pages/principal.dart';
 
 import 'package:saladilloapp/admin/pages/prestamo.dart';
 import 'package:saladilloapp/admin/pages/reserva.dart';
-import 'package:saladilloapp/utils/utilPrestamos.dart';
-
-
-import 'pages/nuevoAlumno.dart';
-import 'pages/nuevodispositivo.dart';
 
 enum ViewType { incidencias, prestamos, reservas }
 

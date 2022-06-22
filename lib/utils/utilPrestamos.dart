@@ -10,9 +10,6 @@ class utilPrestamos extends StatefulWidget {
 }
 
 class _utilPrestamosState extends State<utilPrestamos> {
-  List<String> cursosPrestamos = [];
-  List<String> aulaPrestamo = [];
-  List<String> alumnPrestamos = [];
   List<String> disPrestamos = [];
   var numPrestamos = 0;
   @override
@@ -37,19 +34,16 @@ class _utilPrestamosState extends State<utilPrestamos> {
   }
   getPrestamos() async {
     QuerySnapshot query = await FirebaseFirestore.instance.collection('Prestamos').get();
-    numPrestamos =0;
-    //query.docs.length;
+    numPrestamos =query.docs.length;
     for (var e = 0; e < numPrestamos; e++) {
-      // Map? mapa = query.docs.elementAt(e).data() as Map?;
-      //alumnPrestamos.add(mapa!["NomAlumno"]);
-      //aulaPrestamo.add(mapa["Aula"]);
-      //cursosPrestamos.add(mapa["Curso"]);
-      // disPrestamos.add(mapa["Dispositivo"]);
+       Map? mapa = query.docs.elementAt(e).data() as Map?;
+
+       disPrestamos.add(mapa!["idDispositivo"]);
     }
   }
   tile(int index){
     return Container(
-      height: 500,
+      height: 300,
       width: 200,
       child: Stack(
         children: <Widget>[
@@ -58,10 +52,10 @@ class _utilPrestamosState extends State<utilPrestamos> {
             left: 5,
             child: Container(
               width: 150,
-              height: 200,
-              decoration:BoxDecoration(
-                 color: Colors.cyan[100],
-                  borderRadius: const BorderRadius.only(
+              height: 60,
+              decoration:const BoxDecoration(
+                 color: Colors.orange,
+                  borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(50),
                       topRight: Radius.circular(50),
                     bottomRight: Radius.circular(5),
@@ -86,44 +80,15 @@ class _utilPrestamosState extends State<utilPrestamos> {
             ),
           ),
         Positioned(
-            top: 80,
-            left: 10,
-            child: Text(alumnPrestamos[index])
+            top: 60,
+            left: 30,
+            child: Text("Dis: ${ disPrestamos[index]}")
           ),
-          Positioned(
-              top: 100,
-              left: 10,
-              child: Text( cursosPrestamos[index])
-          ),
-          Positioned(
-              top: 100,
-              left: 30,
-              child: Text( aulaPrestamo[index])
-          ),
-         Positioned(
-              top: 120,
-              left: 10,
-              child: Text( disPrestamos[index])
-          ),
+
         ],
       ),
     );
 
   }
-  tilePrestamo(int index) {
-    return Container(
-      margin: EdgeInsets.fromLTRB(10, 5, 1, 5),
-      decoration: BoxDecoration(
-          color: Colors.purple[100],
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(20), bottomRight: Radius.circular(20))),
-      width: 300,
-      child: ListTile(
-        leading: Text(cursosPrestamos.elementAt(index)),
-        title: Text("Alumno: ${alumnPrestamos.elementAt(index)}"),
-        subtitle: Text("Profesor:${aulaPrestamo.elementAt(index)}"),
-        trailing: Text("Dispositivo: ${disPrestamos.elementAt(index)}"),
-      ),
-    );
-  }
+
 }

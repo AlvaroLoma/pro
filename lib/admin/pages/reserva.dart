@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -21,23 +22,20 @@ class _ReservaState extends State<Reserva> {
   TextEditingController dateinput = TextEditingController();
   final _formulario = GlobalKey<FormState>();
   List<String> nombreCarrito = [];
-  List<int> numDispositivos = [];
-  List<String> ubicacionCarrito = [];
   String nombreCarritoValue = "";
-  String ubicacionCarritoValue = "";
-  int numDispositivosValue = 0;
+  List<String> ubicaciones = [];
+  String ubicacionesValue="";
+  String hora=DateTime.now().toString();
+
+  List<String> horario=['1º hora','2º hora','3º hora','4º hora','5º hora','6º hora'];
+  String horaValue='1º hora';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Reserva"),
-        leading: IconButton(
-          icon: Icon(Icons.keyboard_backspace),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        leading: IconButton(icon: Icon(Icons.keyboard_backspace), onPressed: () {  FirebaseAuth.instance.signOut(); Navigator.pop(context); },),
       ),
       body: Container(
         margin: const EdgeInsets.fromLTRB(10, 0, 20, 0),
@@ -52,6 +50,8 @@ class _ReservaState extends State<Reserva> {
                   key: _formulario,
                   child: Column(
                     children: [
+
+
                       FutureBuilder(
                         future: getCarritos(),
                         builder: (context, snapshot) {
@@ -91,6 +91,34 @@ class _ReservaState extends State<Reserva> {
                           }
                         },
                       ),
+                Container(
+
+                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 5),
+                    child: Row(
+                      children: [
+                        const Text('Hora'),
+                        const Padding(padding:EdgeInsets.fromLTRB(0, 0, 10, 0)),
+                        DropdownButton<String>(
+
+                          value: horaValue,
+                          icon: const Icon(Icons.arrow_downward),
+                          elevation: 16,
+                          style: const TextStyle(color: Colors.blue),
+                          underline: Container(
+                            height: 2,
+                            color: Colors.blue,
+                          ),
+
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              horaValue = newValue!;
+                            });
+                          },
+                          items: horario.map<DropdownMenuItem<String>>((String value) {return DropdownMenuItem<String>(value: value, child: Text(value),);}).toList(),
+                        ),
+
+                      ],
+                    )),
 
                       Container(
                           padding: EdgeInsets.all(15),
@@ -111,20 +139,18 @@ class _ReservaState extends State<Reserva> {
                               DateTime? pickedDate = await showDatePicker(
                                   context: context,
                                   initialDate: DateTime.now(),
-                                  firstDate: DateTime(
-                                      2000), //DateTime.now() - not to allow to choose before today.
+                                  firstDate: DateTime(2000), //DateTime.now() - not to allow to choose before today.
                                   lastDate: DateTime(2101));
 
                               if (pickedDate != null) {
-                                print(
-                                    pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-                                String formattedDate =
-                                    DateFormat('yyyy-MM-dd').format(pickedDate);
-                                print(
-                                    formattedDate); //formatted date output using intl package =>  2021-03-16
+                                print(pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                                String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+
+                                print(formattedDate); //formatted date output using intl package =>  2021-03-16
                                 //you can implement different kind of Date Format here according to your requirement
 
                                 setState(() {
+                                  hora=DateFormat('yyyy-MM-dd').format(pickedDate).toString();
                                   dateinput.text = formattedDate; //set output date to TextField value.
                                 });
                               } else {
@@ -132,7 +158,7 @@ class _ReservaState extends State<Reserva> {
                               }
                             },
                           ))),
-                      Text('HAY QUE ELEGIR CARRITO O SE LE ASIGNA RANDOM?'),
+
                       Container(
                         margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                         child: ElevatedButton(
@@ -164,30 +190,44 @@ class _ReservaState extends State<Reserva> {
   }
 
   Future<void> getCarritos() async {
-
-    if(nombreCarrito.length==0){
       String cadena="";
-      QuerySnapshot query =
-      await FirebaseFirestore.instance.collection('Carritos').get();
-
+      QuerySnapshot query = await FirebaseFirestore.instance.collection('Carritos').get();
       numCarritos = query.docs.length;
+      nombreCarrito=[];
+
       for (var e = 0; e < numCarritos; e++) {
         Map? mapa = query.docs.elementAt(e).data() as Map?;
         if (!mapa!['reservado']) {
-          cadena=mapa['Nombre']+" "+ mapa['ubicacion']+ " Dispositivos: "+(mapa["dis"].toString());
+          cadena="Carrito "+mapa['id'];
           nombreCarrito.add(cadena);
-          nombreCarritoValue=cadena;
+          if(nombreCarritoValue==""){
+            nombreCarritoValue=cadena;
+          }
 
         }
         
       }
-
-    }
-
   }
   
   actualizar() async {
 
-    await FirebaseFirestore.instance.doc('Carritos/C01').update({'reservado':true});
+   // await FirebaseFirestore.instance.doc('Carritos').update({'reservado':true});
+
+    QuerySnapshot query= await FirebaseFirestore.instance.collection('Profesor').where("email", isEqualTo: FirebaseAuth.instance.currentUser!.email).get();
+    Map? mapa = query.docs.elementAt(0).data() as Map?;
+    QuerySnapshot query3= await FirebaseFirestore.instance.collection('Reservas').get();
+    FirebaseFirestore.instance.collection('Reservas').add({
+      "idReserva":query3.docs.length+1,
+      "idcarrito": nombreCarritoValue.split(" ")[1],
+      "profesor":mapa!['nombre'],
+      "fecha":hora,
+      "hora":horaValue
+    });
+
+
+
+
   }
+
+
 }

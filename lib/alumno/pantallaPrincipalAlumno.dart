@@ -6,7 +6,6 @@ import 'pages/prestamo.dart';
 import 'pages/principal.dart';
 
 
-enum ViewType { incidencias, prestamos, reservas }
 
 class PantallaPrincipalAlumno extends StatefulWidget {
   const PantallaPrincipalAlumno({Key? key}) : super(key: key);
@@ -22,7 +21,7 @@ class _PantallaPrincipalAlumnoState extends State<PantallaPrincipalAlumno> {
     Principal(),
     Prestamo(),
     Devolucion(),
-    //carrito impostor
+
 
   ];
 
@@ -38,6 +37,7 @@ class _PantallaPrincipalAlumnoState extends State<PantallaPrincipalAlumno> {
     return Scaffold(
       body: _paginas[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.blue,
         selectedFontSize: 15,
         iconSize: 30,
         items: const <BottomNavigationBarItem>[

@@ -18,7 +18,7 @@ class _nuevoCarritoState extends State<nuevoCarrito> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Nuevo Carrito'),),
+      appBar: AppBar(title: Text('Nuevo Carrito'),leading: IconButton(icon: Icon(Icons.keyboard_backspace), onPressed: () {   Navigator.pop(context); },),),
       body: Center(
         child: SingleChildScrollView(
           child: Column(
